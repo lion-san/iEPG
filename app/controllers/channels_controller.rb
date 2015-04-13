@@ -93,8 +93,8 @@ end
 host = 'http://tv.so-net.ne.jp'
 url = host + '/chart/23.action?head=' + today + '0000&span=24&chartWidth=950&cellHeight=3&sticky=true&descriptive=true&iepgType=0&buttonType=0 '
 
-#html = open(url)
-html = open(url,{:proxy_http_basic_authentication => proxy})
+html = open(url)
+#html = open(url,{:proxy_http_basic_authentication => proxy})
 doc = Nokogiri::HTML(html)
 
 json = "{ \"date\":" + "\"" + today + "\","
@@ -109,8 +109,8 @@ doc.css('a').each do |item|
   if /^\/iepg.tvpi/ =~ item[:href] then
     #test += 1
     puts host+item[:href]
-    #iepg = open(host+item[:href])
-    iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
+    iepg = open(host+item[:href])
+    #iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
 
     #Delay
     sleep(delay)
