@@ -1,0 +1,47 @@
+<div  class="container">
+<br>
+<h2>iEPG List </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+  <thead>
+    <tr>
+      <th>station</th>
+      <th>station_name</th>
+      <th>year</th>
+      <th>month</th>
+      <th>date</th>
+      <th>start_time</th>
+      <th>end_time</th>
+      <th>title</th>
+      <th>subtitle</th>
+      <th>performer</th>
+      <th>subperformer</th>
+      <th>id</th>
+      <th>genre</th>
+      <th>subgenre</th>
+      <th>detail</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @channel.iepgs.each do |channel| %>
+      <tr>
+        <td><%= channel.station %></td>
+        <td><%= channel.station_name %></td>
+        <td><%= channel.year %></td>
+        <td><%= channel.month %></td>
+        <td><%= channel.date %></td>
+        <td><%= channel.start_time %></td>
+        <td><%= channel.end_time %></td>
+        <td><%= channel.title %></td>
+        <td><%= channel.subtitle %></td>
+        <td><%= channel.performer %></td>
+        <td><%= channel.subperformer %></td>
+        <td><%= channel.id %></td>
+        <td><%= channel.genre %></td>
+        <td><%= channel.subgenre %></td>
+        <td><%= channel.detail %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>

@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Channel</h1>
+<p>
+  <strong>Date:</strong>
+  <%= @channel.date %>
+</p>
+
+<p>
+  <strong>Region:</strong>
+  <%= @channel.region %>
+</p>
+
+<p>
+  <strong>Region cd:</strong>
+  <%= @channel.region_cd %>
+</p>
+
+<p>
+  <strong>Iepgs:</strong>
+  <%= @channel.iepgs.length %>
+</p>
+
+<%= render 'details', channel: @channel %>
+
+<%= link_to 'Edit', edit_channel_path(@channel) %> |
+<%= link_to 'Back', channels_path %>

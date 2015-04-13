@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  station: MyString
+  station_name: MyString
+  year: MyString
+  month: MyString
+  date: MyString
+  start_time: MyString
+  end_time: MyString
+  title: MyString
+  subtitle: MyString
+  performer: MyString
+  subperformer: MyString
+  id: MyString
+  genre: MyString
+  subgenre: MyString
+
+two:
+  station: MyString
+  station_name: MyString
+  year: MyString
+  month: MyString
+  date: MyString
+  start_time: MyString
+  end_time: MyString
+  title: MyString
+  subtitle: MyString
+  performer: MyString
+  subperformer: MyString
+  id: MyString
+  genre: MyString
+  subgenre: MyString
