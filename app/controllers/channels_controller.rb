@@ -115,10 +115,11 @@ catch(:exit) {
 test = 0
 doc.css('a').each do |item|
   if /^\/iepg.tvpi/ =~ item[:href] then
-    puts host+item[:href]
+    logger.debug( host+item[:href])
     ipeg = ""
     if proxy_sv == nil then
       iepg = open(host+item[:href])
+      test += 1
     else # For Development Environment
       test += 1
       iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
