@@ -71,7 +71,12 @@ subgenre_json = "subgenre"
 gomi = "</p></body></html>"
 
 #Proxy
-proxy = ["http://rep.proxy.nic.fujitsu.com:8080", "github", "1234567890"]
+proxy_sv =  ENV['ENV_PROXY'] 
+user     =  ENV["ENV_ID"] 
+pass     =  ENV["ENV_PASS"] 
+proxy = [proxy_sv, user, pass]
+logger.debug(proxy)
+
  
 #def to_myhash(str)
 #    str.scan(/(\w+):\s+(\d+)/).map{|k, v| [k.to_sym, v.to_i] }
@@ -82,19 +87,22 @@ today = day.strftime("%Y%m%d")
 
 days = Array.new
 (0..7).each do |d|
-  #p (day+d).strftime("%Y%m%d")
   days.push((day+d).strftime("%Y%m%d"))
 end
 
 days.each do |d|
-  p d
+  logger.debug(d)
 end
 
 host = 'http://tv.so-net.ne.jp'
 url = host + '/chart/23.action?head=' + today + '0000&span=24&chartWidth=950&cellHeight=3&sticky=true&descriptive=true&iepgType=0&buttonType=0 '
 
-html = open(url)
-#html = open(url,{:proxy_http_basic_authentication => proxy})
+html = ""
+if proxy_sv == nil then
+  html = open(url)
+else
+  html = open(url,{:proxy_http_basic_authentication => proxy})
+end
 doc = Nokogiri::HTML(html)
 
 json = "{ \"date\":" + "\"" + today + "\","
@@ -107,10 +115,14 @@ catch(:exit) {
 test = 0
 doc.css('a').each do |item|
   if /^\/iepg.tvpi/ =~ item[:href] then
-    #test += 1
     puts host+item[:href]
-    iepg = open(host+item[:href])
-    #iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
+    ipeg = ""
+    if proxy_sv == nil then
+      iepg = open(host+item[:href])
+    else # For Development Environment
+      test += 1
+      iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
+    end
 
     #Delay
     sleep(delay)
@@ -126,51 +138,50 @@ doc.css('a').each do |item|
       count += 1
 
       str = line.chomp
-      #p str
       if str.index(station) == 0 then
-        p str[station.length+1..str.length]
+        logger.debug( str[station.length+1..str.length] )
         json += "\"" + station_json + "\":\"" + str[station.length+1..str.length] + "\","
       elsif str.index(station_name) == 0 then
-        p str[station_name.length+1..str.length]
+        logger.debug( str[station_name.length+1..str.length])
         json += "\"" + station_name_json + "\":\"" + str[station_name.length+1..str.length] + "\","
       elsif str.index(year) == 0 then
-        p str[year.length+1..str.length]
+        logger.debug( str[year.length+1..str.length])
         json += "\"" + year_json + "\":\"" + str[year.length+1..str.length] + "\","
       elsif str.index(month) == 0 then
-        p str[month.length+1..str.length]
+        logger.debug( str[month.length+1..str.length])
         json += "\"" + month_json + "\":\"" + str[month.length+1..str.length] + "\","
       elsif str.index(date) == 0 then
-        p str[date.length+1..str.length]
+        logger.debug( str[date.length+1..str.length])
         json += "\"" + date_json + "\":\"" + str[date.length+1..str.length] + "\","
       elsif str.index(start_time) == 0 then
-        p str[start_time.length+1..str.length]
+        logger.debug( str[start_time.length+1..str.length])
         json += "\"" + start_time_json + "\":\"" + str[start_time.length+1..str.length] + "\","
       elsif str.index(end_time) == 0 then
-        p str[end_time.length+1..str.length]
+        logger.debug( str[end_time.length+1..str.length])
         json += "\"" + end_time_json + "\":\"" + str[end_time.length+1..str.length] + "\","
       elsif str.index(title) == 0 then
-        p str[title.length+1..str.length]
+        logger.debug( str[title.length+1..str.length])
         json += "\"" + title_json + "\":\"" + str[title.length+1..str.length].sub(/\"/, '”').sub(/&amp;/, '＆') + "\","
       elsif str.index(subtitle) == 0 then
-        p str[subtitle.length+1..str.length]
+        logger.debug( str[subtitle.length+1..str.length])
         json += "\"" + subtitle_json + "\":\"" + str[subtitle.length+1..str.length] + "\","
       elsif str.index(performer) == 0 then
-        p str[performer.length+1..str.length]
+        logger.debug( str[performer.length+1..str.length])
         json += "\"" + performer_json + "\":\"" + str[performer.length+1..str.length] + "\","
       elsif str.index(subperformer) == 0 then
-        p str[subperformer.length+1..str.length]
+        logger.debug( str[subperformer.length+1..str.length])
         json += "\"" + subperformer_json + "\":\"" + str[subperformer.length+1..str.length] + "\","
       elsif str.index(id) == 0 then
-        p str[id.length+1..str.length]
+        logger.debug( str[id.length+1..str.length])
         json += "\"" + id_json + "\":\"" + str[id.length+1..str.length] + "\","
       elsif str.index(genre) == 0 then
-        p str[genre.length+1..str.length]
+        logger.debug( str[genre.length+1..str.length])
         json += "\"" + genre_json + "\":\"" + str[genre.length+1..str.length] + "\","
       elsif str.index(subgenre) == 0 then
-        p str[subgenre.length+1..str.length]
+        logger.debug( str[subgenre.length+1..str.length])
         json += "\"" + subgenre_json + "\":\"" + str[subgenre.length+1..str.length] + "\","
       elsif count == tv.each_line.count
-        p str[0..str.index(gomi)-1]
+        logger.debug( str[0..str.index(gomi)-1])
         json += "\"" + "detail\":" + "\"" + str[0..str.index(gomi)-1].sub(/\"/, '”').sub(/\&amp;/, '＆') + "\""
       end
     end
@@ -182,12 +193,10 @@ end
 
 json = json[0..json.length-2]
 json += " ] }"
-#p "JSON =" + json
 
 logger.debug("======= JSON Created! =======")
 result = JSON.parse(json)
 logger.debug("======= JSON Parsed! =======")
-#puts result
 
 
 #=============================================
