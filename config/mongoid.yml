@@ -72,15 +72,4 @@ production:
   sessions:
     default:
       database: iepg_production
-      hosts:
-        - ds061651.mongolab.com:61651
-      username:
-      password:
-      options:
-        read: primary
-        # In the test environment we lower the retries and retry interval to
-        # low amounts for fast failures.
-        max_retries: 1
-        retry_interval: 0
-    another:
-      url:<%= ENV['MONGOLAB_URI'] %>
+      url: <%= ENV['MONGOLAB_URI'] %>
