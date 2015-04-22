@@ -124,7 +124,6 @@ doc.css('a').each do |item|
       test += 1
     else # For Development Environment
       iepg = open(host+item[:href])
-      test += 1
     end
 
     #Delay
