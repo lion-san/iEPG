@@ -71,6 +71,7 @@ subgenre_json = "subgenre"
 gomi = "</p></body></html>"
 
 #Proxy
+use_proxy = ENV['ENV_USE_PROXY']
 proxy_sv =  ENV['ENV_PROXY'] 
 user     =  ENV["ENV_ID"] 
 pass     =  ENV["ENV_PASS"] 
@@ -98,10 +99,10 @@ host = 'http://tv.so-net.ne.jp'
 url = host + '/chart/23.action?head=' + today + '0000&span=24&chartWidth=950&cellHeight=3&sticky=true&descriptive=true&iepgType=0&buttonType=0 '
 
 html = ""
-if proxy_sv == nil then
-  html = open(url)
-else
+if use_proxy == "true" then
   html = open(url,{:proxy_http_basic_authentication => proxy})
+else
+  html = open(url)
 end
 doc = Nokogiri::HTML(html)
 
@@ -117,12 +118,13 @@ doc.css('a').each do |item|
   if /^\/iepg.tvpi/ =~ item[:href] then
     logger.debug( host+item[:href])
     ipeg = ""
-    if proxy_sv == nil then
-      iepg = open(host+item[:href])
+
+    if use_proxy == "true" then
+      iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
       test += 1
     else # For Development Environment
+      iepg = open(host+item[:href])
       test += 1
-      iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
     end
 
     #Delay
