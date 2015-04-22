@@ -94,7 +94,6 @@ days.each do |today|
   logger.debug(today)
 
 ##Loop Start ###
-
 host = 'http://tv.so-net.ne.jp'
 url = host + '/chart/23.action?head=' + today + '0000&span=24&chartWidth=950&cellHeight=3&sticky=true&descriptive=true&iepgType=0&buttonType=0 '
 
@@ -117,7 +116,7 @@ test = 0
 doc.css('a').each do |item|
   if /^\/iepg.tvpi/ =~ item[:href] then
     logger.debug( host+item[:href])
-    ipeg = ""
+    ipeg = ''
 
     if use_proxy == "true" then
       iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
@@ -132,6 +131,9 @@ doc.css('a').each do |item|
     tv_sjis = Nokogiri::HTML.parse(iepg, nil, "Shift_JIS")
     
     tv = tv_sjis.to_s.encode("UTF-8", "Shift_JIS")
+    #logger.debug(tv)
+    #データ配信不具合対応（最終行番組説明が来ない場合）
+    flg = true
 
     #Jsonに変換
     count = 0
@@ -140,6 +142,7 @@ doc.css('a').each do |item|
       count += 1
 
       str = line.chomp
+
       if str.index(station) == 0 then
         logger.debug( str[station.length+1..str.length] )
         json += "\"" + station_json + "\":\"" + str[station.length+1..str.length] + "\","
@@ -183,10 +186,18 @@ doc.css('a').each do |item|
         logger.debug( str[subgenre.length+1..str.length])
         json += "\"" + subgenre_json + "\":\"" + str[subgenre.length+1..str.length] + "\","
       elsif count == tv.each_line.count
+        flg = false
         logger.debug( str[0..str.index(gomi)-1])
         json += "\"" + "detail\":" + "\"" + str[0..str.index(gomi)-1].gsub(/\"/, '”').gsub(/\&amp;/, '＆').gsub(/\'/, '’') + "\""
       end
     end
+
+    #データ配信の不具合？対応
+    if flg then
+      json = json[0..json.length-2]
+      json.gsub(/<.*>/, '')
+    end
+
     json += "},"
     throw :exit if test >= 3
   end
