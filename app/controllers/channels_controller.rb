@@ -163,7 +163,7 @@ doc.css('a').each do |item|
         json += "\"" + end_time_json + "\":\"" + str[end_time.length+1..str.length] + "\","
       elsif str.index(title) == 0 then
         logger.debug( str[title.length+1..str.length])
-        json += "\"" + title_json + "\":\"" + str[title.length+1..str.length].gsub(/\"/, '”').gsub(/&amp;/, '＆') + "\","
+        json += "\"" + title_json + "\":\"" + str[title.length+1..str.length].gsub(/\"/, '”').gsub(/&amp;/, '＆').gsub(/\'/, '’') + "\","
       elsif str.index(subtitle) == 0 then
         logger.debug( str[subtitle.length+1..str.length])
         json += "\"" + subtitle_json + "\":\"" + str[subtitle.length+1..str.length] + "\","
@@ -184,7 +184,7 @@ doc.css('a').each do |item|
         json += "\"" + subgenre_json + "\":\"" + str[subgenre.length+1..str.length] + "\","
       elsif count == tv.each_line.count
         logger.debug( str[0..str.index(gomi)-1])
-        json += "\"" + "detail\":" + "\"" + str[0..str.index(gomi)-1].gsub(/\"/, '”').gsub(/\&amp;/, '＆') + "\""
+        json += "\"" + "detail\":" + "\"" + str[0..str.index(gomi)-1].gsub(/\"/, '”').gsub(/\&amp;/, '＆').gsub(/\'/, '’') + "\""
       end
     end
     json += "},"
