@@ -83,16 +83,17 @@ proxy = [proxy_sv, user, pass]
 #end
 
 day = Date.today
-today = day.strftime("%Y%m%d")
+#today = day.strftime("%Y%m%d")
 
 days = Array.new
 (0..7).each do |d|
   days.push((day+d).strftime("%Y%m%d"))
 end
 
-days.each do |d|
-  logger.debug(d)
-end
+days.each do |today|
+  logger.debug(today)
+
+##Loop Start ###
 
 host = 'http://tv.so-net.ne.jp'
 url = host + '/chart/23.action?head=' + today + '0000&span=24&chartWidth=950&cellHeight=3&sticky=true&descriptive=true&iepgType=0&buttonType=0 '
@@ -202,17 +203,22 @@ logger.debug("======= JSON Parsed! =======")
 
 #=============================================
 
-    #@channel = Channel.new(channel_params)
-    @channel = Channel.new(result)
 
+    @channel = Channel.new(result)
+    @channel.save
+
+end
+##Loop End ###
+
+    
     respond_to do |format|
-      if @channel.save
+      #if @channel.save
         format.html { redirect_to @channel, notice: 'Channel was successfully created.' }
         format.json { render action: 'show', status: :created, location: @channel }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @channel.errors, status: :unprocessable_entity }
-      end
+      #else
+      #  format.html { render action: 'new' }
+      #  format.json { render json: @channel.errors, status: :unprocessable_entity }
+      #end
     end
   end
 
