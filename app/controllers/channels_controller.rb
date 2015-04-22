@@ -37,7 +37,7 @@ class ChannelsController < ApplicationController
 #=============================================
 
 #Delay
-delay = 0.5 #Second
+delay = 0 #Second
 
 #Define
 station = "station:"
@@ -76,7 +76,6 @@ proxy_sv =  ENV['ENV_PROXY']
 user     =  ENV["ENV_ID"] 
 pass     =  ENV["ENV_PASS"] 
 proxy = [proxy_sv, user, pass]
-logger.debug(proxy)
 
  
 #def to_myhash(str)
@@ -121,7 +120,7 @@ doc.css('a').each do |item|
 
     if use_proxy == "true" then
       iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
-      test += 1
+      #test += 1
     else # For Development Environment
       iepg = open(host+item[:href])
     end
@@ -163,7 +162,7 @@ doc.css('a').each do |item|
         json += "\"" + end_time_json + "\":\"" + str[end_time.length+1..str.length] + "\","
       elsif str.index(title) == 0 then
         logger.debug( str[title.length+1..str.length])
-        json += "\"" + title_json + "\":\"" + str[title.length+1..str.length].sub(/\"/, '”').sub(/&amp;/, '＆') + "\","
+        json += "\"" + title_json + "\":\"" + str[title.length+1..str.length].gsub(/\"/, '”').gsub(/&amp;/, '＆') + "\","
       elsif str.index(subtitle) == 0 then
         logger.debug( str[subtitle.length+1..str.length])
         json += "\"" + subtitle_json + "\":\"" + str[subtitle.length+1..str.length] + "\","
@@ -184,7 +183,7 @@ doc.css('a').each do |item|
         json += "\"" + subgenre_json + "\":\"" + str[subgenre.length+1..str.length] + "\","
       elsif count == tv.each_line.count
         logger.debug( str[0..str.index(gomi)-1])
-        json += "\"" + "detail\":" + "\"" + str[0..str.index(gomi)-1].sub(/\"/, '”').sub(/\&amp;/, '＆') + "\""
+        json += "\"" + "detail\":" + "\"" + str[0..str.index(gomi)-1].gsub(/\"/, '”').gsub(/\&amp;/, '＆') + "\""
       end
     end
     json += "},"
