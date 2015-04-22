@@ -78,7 +78,7 @@ production:
      # Use environment variables or a config file to keep your
      # credentials safe.
      #uri: 'mongodb://nutria:yokoi123@ds061651.mongolab.com:61651/heroku_app35832322'
-     url: <%= ENV['MONGOLAB_URI'] %>
+     uri: <%= ENV['MONGOLAB_URI'] %>
 
 
      options:
