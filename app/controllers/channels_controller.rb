@@ -143,9 +143,7 @@ doc.css('a').each do |item|
       count += 1
 
       str = line.chomp
-      logger.debug(str)
       str = str.gsub(/\"/, '”').gsub(/&amp;/, '＆').gsub(/\'/, '’').gsub(/<\/p><\/body><\/html>/, '')
-      logger.debug(str)
 
       if str.index(station) == 0 then
         logger.debug( str[station.length+1..str.length] )
@@ -217,7 +215,8 @@ logger.debug("======= JSON Parsed! =======")
 
 #=============================================
 
-
+    @channel = Channel.find_or_create_by(id: today)
+    @channel.destroy
     @channel = Channel.new(result)
     @channel.save
 
