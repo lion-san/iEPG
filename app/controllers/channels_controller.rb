@@ -62,8 +62,8 @@ performer = "performer:"
 performer_json = "performer"
 subperformer = "subperformer:"
 subperformer_json = "subperformer"
-id = "program-id:"
-id_json = "id"
+programid = "program-id:"
+programid_json = "program_id"
 genre = "genre-1:"
 genre_json = "genre"
 subgenre = "subgenre-1:"
@@ -105,7 +105,8 @@ else
 end
 doc = Nokogiri::HTML(html)
 
-json = "{ \"date\":" + "\"" + today + "\","
+json = "{ \"id\":" + "\"" + today + "\","
+json += "\"date\":" + "\"" + today + "\","
 json += "\"region\":" + "\"" + "東京" + "\","
 json += "\"region_cd\":" + "\"" + "23" + "\","
 json += "\"iepgs\" : [ "
@@ -120,7 +121,7 @@ doc.css('a').each do |item|
 
     if use_proxy == "true" then
       iepg = open(host+item[:href], {:proxy_http_basic_authentication => proxy})
-      #test += 1
+      test += 1
     else # For Development Environment
       iepg = open(host+item[:href])
     end
@@ -142,6 +143,9 @@ doc.css('a').each do |item|
       count += 1
 
       str = line.chomp
+      logger.debug(str)
+      str = str.gsub(/\"/, '”').gsub(/&amp;/, '＆').gsub(/\'/, '’').gsub(/<\/p><\/body><\/html>/, '')
+      logger.debug(str)
 
       if str.index(station) == 0 then
         logger.debug( str[station.length+1..str.length] )
@@ -166,7 +170,7 @@ doc.css('a').each do |item|
         json += "\"" + end_time_json + "\":\"" + str[end_time.length+1..str.length] + "\","
       elsif str.index(title) == 0 then
         logger.debug( str[title.length+1..str.length])
-        json += "\"" + title_json + "\":\"" + str[title.length+1..str.length].gsub(/\"/, '”').gsub(/&amp;/, '＆').gsub(/\'/, '’') + "\","
+        json += "\"" + title_json + "\":\"" + str[title.length+1..str.length] + "\","
       elsif str.index(subtitle) == 0 then
         logger.debug( str[subtitle.length+1..str.length])
         json += "\"" + subtitle_json + "\":\"" + str[subtitle.length+1..str.length] + "\","
@@ -176,9 +180,9 @@ doc.css('a').each do |item|
       elsif str.index(subperformer) == 0 then
         logger.debug( str[subperformer.length+1..str.length])
         json += "\"" + subperformer_json + "\":\"" + str[subperformer.length+1..str.length] + "\","
-      elsif str.index(id) == 0 then
-        logger.debug( str[id.length+1..str.length])
-        json += "\"" + id_json + "\":\"" + str[id.length+1..str.length] + "\","
+      elsif str.index(programid) == 0 then
+        logger.debug( str[programid.length+1..str.length])
+        json += "\"" + programid_json + "\":\"" + str[programid.length+1..str.length] + "\","
       elsif str.index(genre) == 0 then
         logger.debug( str[genre.length+1..str.length])
         json += "\"" + genre_json + "\":\"" + str[genre.length+1..str.length] + "\","
@@ -187,15 +191,14 @@ doc.css('a').each do |item|
         json += "\"" + subgenre_json + "\":\"" + str[subgenre.length+1..str.length] + "\","
       elsif count == tv.each_line.count
         flg = false
-        logger.debug( str[0..str.index(gomi)-1])
-        json += "\"" + "detail\":" + "\"" + str[0..str.index(gomi)-1].gsub(/\"/, '”').gsub(/\&amp;/, '＆').gsub(/\'/, '’') + "\""
+        logger.debug( str )
+        json += "\"" + "detail\":" + "\"" + str + "\""
       end
     end
 
     #データ配信の不具合？対応
     if flg then
       json = json[0..json.length-2]
-      json.gsub(/<.*>/, '')
     end
 
     json += "},"

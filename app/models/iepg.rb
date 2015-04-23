@@ -11,7 +11,7 @@ class Iepg
   field :subtitle, type: String
   field :performer, type: String
   field :subperformer, type: String
-  field :id, type: String
+  field :program_id, type: String
   field :genre, type: String
   field :subgenre, type: String
   field :detail, type: String
