@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   #  response.headers["Access-Control-Allow-Methods"] = "PUT,DELETE,POST,GET,OPTIONS"
   #end
 
-  protect_from_forgery with: :exception
   after_filter :set_access_control_headers
  
 　def set_access_control_headers 
