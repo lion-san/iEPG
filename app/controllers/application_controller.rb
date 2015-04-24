@@ -3,12 +3,21 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  def add_allow_credentials_headers
-    response.headers['Access-Control-Allow-Origin'] = request.headers['Origin'] || '*'
-    response.headers['Access-Control-Allow-Credentials'] = 'true'
+   # ------ ここから下が追加した設定です　-----------------
+  skip_before_action :verify_authenticity_token
+  before_action :cors_preflight_check
+  after_action :cors_set_access_control_headers
+ 
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+    headers['Access-Control-Max-Age'] = "1728000"
   end
-
-  def options
-    head :status => 200, :'Access-Control-Allow-Headers' => 'accept, content-type'
+ 
+  def cors_preflight_check
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+    headers['Access-Control-Allow-Headers'] = '*'
+    headers['Access-Control-Max-Age'] = '1728000'
   end
 end
