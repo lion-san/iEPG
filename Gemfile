@@ -48,3 +48,12 @@ gem 'io-console'
 gem 'mongoid', '4.0.0.beta1'
 gem 'bson_ext'
 gem 'nokogiri'
+
+group :development, :test do
+  gem 'rspec-rails', '2.13.1'
+end
+
+group :test do
+  gem 'selenium-webdriver', '2.35.1'
+  gem 'capybara', '2.1.0'
+end
