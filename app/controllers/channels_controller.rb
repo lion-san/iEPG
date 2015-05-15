@@ -6,6 +6,8 @@ require 'json'
 class ChannelsController < ApplicationController
   before_action :set_channel, only: [:show, :edit, :update, :destroy]
 
+  protect_from_forgery with: :null_session
+
   # GET /channels
   # GET /channels.json
   def index
