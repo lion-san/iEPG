@@ -114,7 +114,8 @@ json += "\"iepgs\" : [ "
 catch(:exit) {
 
 test = 0
-doc.css('a').each do |item|
+doc.xpath('//td[@class="td-schedule"]').each do |doc2|
+doc2.css('a').each do |item|
   if /^\/iepg.tvpi/ =~ item[:href] then
     logger.debug( host+item[:href])
     ipeg = ''
@@ -202,7 +203,8 @@ doc.css('a').each do |item|
     json += "},"
     throw :exit if test >= 3
   end
-end
+end #Nokogiri 'a'
+end #Nokogiri td-schedule
 }
 
 json = json[0..json.length-2]
