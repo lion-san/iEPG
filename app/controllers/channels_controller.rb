@@ -12,6 +12,11 @@ class ChannelsController < ApplicationController
   # GET /channels.json
   def index
     @channels = Channel.all
+
+    respond_to do |format|
+      format.html
+      format.csv
+    end
   end
 
   # GET /channels/1
@@ -20,6 +25,7 @@ class ChannelsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render :json => @channel }
+      format.csv
     end
   end
 
